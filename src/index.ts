@@ -1,13 +1,10 @@
 #!/usr/bin/env node
 import { Command } from "commander";
-import dotenv from "dotenv";
 import inquirer from "inquirer";
 import { getLinearToken, setLinearToken, deleteLinearToken } from "./utils/config";
 import { getLinearClient } from "./utils/linear-client";
 
 const pkg = require("../package.json");
-
-dotenv.config();
 
 const program = new Command();
 

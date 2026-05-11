@@ -1,13 +1,14 @@
 {
   "name": "linear-cli",
   "version": "1.0.0",
-  "description": "��#\u0000 \u0000L\u0000i\u0000n\u0000e\u0000a\u0000r\u0000 \u0000C\u0000L\u0000I\u0000\r\u0000 \u0000",
+  "description": "CLI para interactuar con Linear",
   "main": "dist/index.js",
   "bin": {
     "linear-cli": "./dist/index.js"
   },
   "scripts": {
     "build": "tsc",
+    "prepare": "npm run build",
     "start": "node dist/index.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },

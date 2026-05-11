@@ -48,6 +48,23 @@ Si solo quieres usar la herramienta sin modificar el código:
    linear-cli --version
    ```
 
+### 💡 Solución de Problemas (Comando no encontrado)
+
+Si después de instalar globalmente recibes un error tipo `command not found` o `no se reconoce como un comando interno`, es probable que la carpeta de binarios de npm no esté en tu **PATH**.
+
+- **En Windows (PowerShell):**
+  Para probarlo en la sesión actual:
+  ```powershell
+  $env:Path += ";$(npm config get prefix)"
+  ```
+  *Nota: Para que sea permanente, debes añadir el resultado de `npm config get prefix` a las **Variables de Entorno del Sistema** en el Panel de Control.*
+
+- **En macOS/Linux (Bash/Zsh):**
+  ```bash
+  export PATH=$PATH:$(npm config get prefix)/bin
+  ```
+  Añade esa línea a tu `.bashrc` o `.zshrc` para que sea permanente.
+
 ---
 
 ## 🔄 Sistema de Actualizaciones

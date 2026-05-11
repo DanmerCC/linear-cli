@@ -4,7 +4,7 @@
   "description": "CLI para interactuar con Linear",
   "main": "dist/index.js",
   "bin": {
-    "linear-cli": "./dist/index.js"
+    "linear-cli": "dist/index.js"
   },
   "scripts": {
     "build": "tsc",

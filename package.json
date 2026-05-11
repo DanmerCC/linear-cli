@@ -26,10 +26,12 @@
   "dependencies": {
     "@linear/sdk": "^84.0.0",
     "@types/inquirer": "^8.2.5",
+    "@types/update-notifier": "^5.1.0",
     "commander": "^14.0.3",
     "conf": "^10.2.0",
     "dotenv": "^17.4.2",
-    "inquirer": "^8.2.5"
+    "inquirer": "^8.2.5",
+    "update-notifier": "^5.1.0"
   },
   "devDependencies": {
     "@types/node": "^25.6.2",

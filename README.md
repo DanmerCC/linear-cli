@@ -37,10 +37,22 @@ Si solo quieres usar la herramienta sin modificar el código:
    npm install -g git+https://github.com/DanmerCC/linear-cli.git
    ```
 
-2. **Verificar instalación:**
+2. **Actualizar la herramienta:**
+   Para obtener las últimas funcionalidades y correcciones, simplemente vuelve a ejecutar el comando de instalación:
+   ```bash
+   npm install -g git+https://github.com/DanmerCC/linear-cli.git
+   ```
+
+3. **Verificar instalación:**
    ```bash
    linear-cli --version
    ```
+
+---
+
+## 🔄 Sistema de Actualizaciones
+
+La CLI incluye un sistema de notificación automática. Si hay una nueva versión disponible en el repositorio, verás un mensaje al final de la ejecución sugiriéndote la actualización.
 
 ---
 

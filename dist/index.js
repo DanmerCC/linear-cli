@@ -6,6 +6,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const commander_1 = require("commander");
 const inquirer_1 = __importDefault(require("inquirer"));
+const path_1 = __importDefault(require("path"));
 const config_1 = require("./utils/config");
 const linear_client_1 = require("./utils/linear-client");
 const pkg = require("../package.json");
@@ -49,7 +50,13 @@ program
 program
     .command("login")
     .description("Configurar o actualizar el API Key de Linear")
-    .action(async () => {
+    .argument("[token]", "El API Key de Linear")
+    .action(async (token) => {
+    if (token) {
+        (0, config_1.setLinearToken)(token);
+        console.log("¡Token guardado correctamente!");
+        return;
+    }
     const answers = await inquirer_1.default.prompt([
         {
             type: "password",
@@ -172,5 +179,40 @@ program
     catch (error) {
         console.error("Error al actualizar la tarea:", error instanceof Error ? error.message : error);
     }
+});
+program
+    .command("comment <identifier> <body>")
+    .description("Agregar un comentario a una tarea")
+    .action(async (identifier, body) => {
+    await ensureAuthenticated();
+    try {
+        const client = (0, linear_client_1.getLinearClient)();
+        const issue = await client.issue(identifier);
+        if (!issue) {
+            console.error(`No se encontró la tarea con identificador: ${identifier}`);
+            return;
+        }
+        await client.createComment({ issueId: issue.id, body });
+        console.log(`Comentario agregado a ${identifier}.`);
+    }
+    catch (error) {
+        console.error("Error al agregar el comentario:", error instanceof Error ? error.message : error);
+    }
+});
+program
+    .command("setup-windows")
+    .description("Mostrar guía para agregar la CLI al PATH en Windows")
+    .action(() => {
+    const distPath = path_1.default.resolve(__dirname);
+    console.log("\nPara agregar la CLI al PATH en Windows y usarla desde cualquier terminal:");
+    console.log("--------------------------------------------------------------------------");
+    console.log("1. Abre PowerShell como Administrador.");
+    console.log("2. Copia la siguiente ruta:");
+    console.log(`   ${distPath}`);
+    console.log("\n3. Ejecuta el siguiente comando, reemplazando la ruta copiada:");
+    console.log(`   setx /M PATH "$env:PATH;${distPath}"`);
+    console.log("\n4. Cierra y vuelve a abrir la terminal para que los cambios surtan efecto.");
+    console.log("5. Verifica la instalación ejecutando: linear-cli --version");
+    console.log("--------------------------------------------------------------------------\n");
 });
 program.parseAsync(process.argv);

@@ -1,6 +1,7 @@
 #!/usr/bin/env node
 import { Command } from "commander";
 import inquirer from "inquirer";
+import path from "path";
 import { getLinearToken, setLinearToken, deleteLinearToken } from "./utils/config";
 import { getLinearClient } from "./utils/linear-client";
 
@@ -51,7 +52,14 @@ program
 program
   .command("login")
   .description("Configurar o actualizar el API Key de Linear")
-  .action(async () => {
+  .argument("[token]", "El API Key de Linear")
+  .action(async (token) => {
+    if (token) {
+      setLinearToken(token);
+      console.log("¡Token guardado correctamente!");
+      return;
+    }
+
     const answers = await inquirer.prompt([
       {
         type: "password",
@@ -189,6 +197,44 @@ program
     } catch (error) {
       console.error("Error al actualizar la tarea:", error instanceof Error ? error.message : error);
     }
+  });
+
+program
+  .command("comment <identifier> <body>")
+  .description("Agregar un comentario a una tarea")
+  .action(async (identifier, body) => {
+    await ensureAuthenticated();
+    try {
+      const client = getLinearClient();
+      const issue = await client.issue(identifier);
+
+      if (!issue) {
+        console.error(`No se encontró la tarea con identificador: ${identifier}`);
+        return;
+      }
+
+      await client.createComment({ issueId: issue.id, body });
+      console.log(`Comentario agregado a ${identifier}.`);
+    } catch (error) {
+      console.error("Error al agregar el comentario:", error instanceof Error ? error.message : error);
+    }
+  });
+
+program
+  .command("setup-windows")
+  .description("Mostrar guía para agregar la CLI al PATH en Windows")
+  .action(() => {
+    const distPath = path.resolve(__dirname);
+    console.log("\nPara agregar la CLI al PATH en Windows y usarla desde cualquier terminal:");
+    console.log("--------------------------------------------------------------------------");
+    console.log("1. Abre PowerShell como Administrador.");
+    console.log("2. Copia la siguiente ruta:");
+    console.log(`   ${distPath}`);
+    console.log("\n3. Ejecuta el siguiente comando, reemplazando la ruta copiada:");
+    console.log(`   setx /M PATH "$env:PATH;${distPath}"`);
+    console.log("\n4. Cierra y vuelve a abrir la terminal para que los cambios surtan efecto.");
+    console.log("5. Verifica la instalación ejecutando: linear-cli --version");
+    console.log("--------------------------------------------------------------------------\n");
   });
 
 program.parseAsync(process.argv);
